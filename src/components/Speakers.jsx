@@ -32,6 +32,9 @@ const Speakers = () => {
 
     return (
         <section id="speakers" className="py-32 bg-finance-navy relative overflow-hidden">
+            {/* Global Noise Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
             {/* Background Gradients */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-finance-gold/5 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
 
@@ -45,7 +48,7 @@ const Speakers = () => {
                     <div>
                         <h4 className="text-finance-gold font-bold tracking-widest uppercase text-sm mb-4">The Visionaries</h4>
                         <h2 className="text-5xl md:text-6xl font-display font-medium text-white leading-[1.1]">
-                            Voices of <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Authority.</span>
+                            Voices of <br /> <span className="font-serif italic text-finance-emerald">Authority.</span>
                         </h2>
                     </div>
                     <p className="text-gray-400 max-w-sm text-lg text-right md:text-left">

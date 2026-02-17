@@ -34,6 +34,12 @@ const About = () => {
 
     return (
         <section id="about" className="py-32 bg-finance-navy relative overflow-hidden">
+            {/* Global Noise Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
+            {/* Ambient Glow */}
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-finance-emerald/5 rounded-full blur-[100px] pointer-events-none"></div>
+
             <div className="container mx-auto px-6 relative z-10">
 
                 <div className="flex flex-col lg:flex-row gap-20">
@@ -46,9 +52,9 @@ const About = () => {
                                 viewport={{ once: true }}
                             >
                                 <h2 className="text-6xl md:text-7xl font-display font-medium text-white mb-8 leading-[0.9]">
-                                    Beyond <br /> the <span className="italic text-gray-500 font-serif">Textbook.</span>
+                                    Beyond <br /> the <span className="italic text-finance-gold font-serif">Textbook.</span>
                                 </h2>
-                                <p className="text-xl text-gray-400 leading-relaxed mb-12 max-w-md">
+                                <p className="text-xl text-gray-400 leading-relaxed mb-12 max-w-md font-light">
                                     FinExplorer isn't just an event; it's a paradigm shift. We dismantle the traditional academic approach and rebuild it with real-world relevance.
                                 </p>
 
@@ -84,7 +90,7 @@ const About = () => {
                                             <h3 className="text-3xl md:text-4xl font-display text-white mb-4 group-hover:translate-x-2 transition-transform duration-300">
                                                 {feature.title}
                                             </h3>
-                                            <p className="text-gray-500 text-lg leading-relaxed max-w-lg group-hover:text-gray-300 transition-colors">
+                                            <p className="text-gray-500 text-lg leading-relaxed max-w-lg group-hover:text-gray-300 transition-colors font-light">
                                                 {feature.desc}
                                             </p>
                                         </div>

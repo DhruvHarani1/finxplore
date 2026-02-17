@@ -59,8 +59,11 @@ const Timeline = () => {
 
     return (
         <section id="timeline" ref={ref} className="py-32 bg-finance-navy relative overflow-hidden">
-            {/* Background Gradients */}
-            <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[100px] -translate-x-1/2"></div>
+            {/* Global Noise Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
+            {/* Background Gradients - Unified to Gold */}
+            <div className="absolute top-1/3 left-0 w-[500px] h-[500px] bg-finance-gold/5 rounded-full blur-[100px] -translate-x-1/2 pointer-events-none"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="text-center mb-24">
@@ -76,7 +79,7 @@ const Timeline = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         className="text-4xl md:text-5xl font-display font-medium text-white"
                     >
-                        A day of <span className="italic font-serif text-gray-400">insight.</span>
+                        A day of <span className="italic font-serif text-finance-emerald">insight.</span>
                     </motion.h2>
                 </div>
 

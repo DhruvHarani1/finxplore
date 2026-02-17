@@ -90,14 +90,20 @@ const WhyAttend = () => {
     ];
 
     return (
-        <section className="py-24 bg-finance-navy relative">
-            <div className="container mx-auto px-6">
+        <section className="py-24 bg-finance-navy relative overflow-hidden">
+            {/* Global Noise Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
+            {/* Ambient Glow */}
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-finance-emerald/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
                     <div>
                         <h4 className="text-finance-gold font-bold tracking-widest uppercase text-sm mb-4">The ROI</h4>
                         <h2 className="text-4xl md:text-5xl font-display font-medium text-white">
                             Invest one day.<br />
-                            <span className="text-gray-500">Transform your</span> <span className="text-finance-emerald">decade.</span>
+                            <span className="text-gray-500">Transform your</span> <span className="text-finance-emerald font-serif italic">decade.</span>
                         </h2>
                     </div>
                 </div>

@@ -22,6 +22,9 @@ const Sponsors = () => {
 
     return (
         <section className="py-24 bg-finance-navy relative overflow-hidden">
+            {/* Global Noise Overlay */}
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
+
             {/* Soft Gradient Overlay */}
             <div className="absolute inset-0 bg-finance-navy z-20 pointer-events-none [mask-image:linear-gradient(to_right,white_0%,transparent_20%,transparent_80%,white_100%)]"></div>
 
