@@ -17,6 +17,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         display: ['Outfit', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
