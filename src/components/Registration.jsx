@@ -1,204 +1,277 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Users, Briefcase, CheckCircle, AlertCircle } from 'lucide-react';
+import { User, Users, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader } from 'lucide-react';
 
 const Registration = () => {
     const [activeTab, setActiveTab] = useState('entry');
     const [submitStatus, setSubmitStatus] = useState(null);
 
+    // Reusable Input Component
+    const InputField = ({ label, register, name, rules, error, type = "text", placeholder }) => (
+        <div className="mb-4">
+            <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">{label}</label>
+            <input
+                type={type}
+                placeholder={placeholder}
+                {...register(name, rules)}
+                className={`w-full bg-finance-lightNavy/30 border ${error ? 'border-red-500' : 'border-white/10'} rounded-xl px-5 py-4 text-white placeholder-gray-400 focus:border-finance-gold focus:ring-1 focus:ring-finance-gold focus:outline-none transition-all duration-300`}
+            />
+            {error && <span className="text-red-400 text-xs flex items-center gap-1 mt-2 opacity-0 animate-fadeIn"><AlertCircle size={12} /> {error.message}</span>}
+        </div>
+    );
+
+    const SelectField = ({ label, register, name, rules, error, options }) => (
+        <div className="mb-4">
+            <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">{label}</label>
+            <div className="relative">
+                <select
+                    {...register(name, rules)}
+                    className={`w-full bg-finance-lightNavy/30 border ${error ? 'border-red-500' : 'border-white/10'} rounded-xl px-5 py-4 text-white focus:border-finance-gold focus:ring-1 focus:ring-finance-gold focus:outline-none transition-all duration-300 appearance-none`}
+                >
+                    <option value="" className="bg-finance-navy text-gray-400">Select an option</option>
+                    {options.map(opt => (
+                        <option key={opt.value} value={opt.value} className="bg-finance-navy">{opt.label}</option>
+                    ))}
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+            </div>
+            {error && <span className="text-red-400 text-xs flex items-center gap-1 mt-2"><AlertCircle size={12} /> {error.message}</span>}
+        </div>
+    );
+
+    const FormContainer = ({ onSubmit, children, isSubmitting, btnColor = "bg-finance-gold", btnText = "Complete Registration" }) => (
+        <form onSubmit={onSubmit} className="h-full flex flex-col justify-between">
+            <div className="space-y-1">
+                {children}
+            </div>
+            <button
+                disabled={isSubmitting}
+                type="submit"
+                className={`w-full ${btnColor} text-finance-navy font-bold py-4 rounded-xl mt-8 flex items-center justify-center gap-3 hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed group`}
+            >
+                {isSubmitting ? <Loader className="animate-spin" size={20} /> : (
+                    <>
+                        {btnText} <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    </>
+                )}
+            </button>
+        </form>
+    );
+
     const EntryForm = () => {
         const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
         const onSubmit = async (data) => {
             console.log("Entry Data:", data);
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
             setSubmitStatus('success');
             setTimeout(() => setSubmitStatus(null), 3000);
         };
 
         return (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Full Name</label>
-                    <input {...register("fullName", { required: "Name is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                    {errors.fullName && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.fullName.message}</span>}
+            <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting}>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Full Name" name="fullName" register={register} rules={{ required: "Required" }} error={errors.fullName} placeholder="John Doe" />
+                    <InputField label="Email Address" name="email" type="email" register={register} rules={{ required: "Required" }} error={errors.email} placeholder="john@example.com" />
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Email</label>
-                    <input type="email" {...register("email", { required: "Email is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                    {errors.email && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.email.message}</span>}
-                </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">College Name</label>
-                    <input {...register("college", { required: "College is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                    {errors.college && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.college.message}</span>}
-                </div>
+                <InputField label="College / Institution" name="college" register={register} rules={{ required: "Required" }} error={errors.college} placeholder="e.g. Harvard University" />
                 <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm text-gray-400 mb-1">Course</label>
-                        <select {...register("course", { required: "Course is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none">
-                            <option value="">Select</option>
-                            <option value="B.Com">B.Com</option>
-                            <option value="BBA">BBA</option>
-                            <option value="MBA">MBA</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        {errors.course && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.course.message}</span>}
-                    </div>
-                    <div>
-                        <label className="block text-sm text-gray-400 mb-1">Year</label>
-                        <select {...register("year", { required: "Year is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none">
-                            <option value="">Select</option>
-                            <option value="1">1st Year</option>
-                            <option value="2">2nd Year</option>
-                            <option value="3">3rd Year</option>
-                        </select>
-                        {errors.year && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.year.message}</span>}
-                    </div>
+                    <SelectField
+                        label="Course"
+                        name="course"
+                        register={register}
+                        rules={{ required: "Required" }}
+                        error={errors.course}
+                        options={[{ value: "B.Com", label: "B.Com" }, { value: "BBA", label: "BBA" }, { value: "MBA", label: "MBA" }, { value: "Other", label: "Other" }]}
+                    />
+                    <SelectField
+                        label="Year"
+                        name="year"
+                        register={register}
+                        rules={{ required: "Required" }}
+                        error={errors.year}
+                        options={[{ value: "1", label: "1st Year" }, { value: "2", label: "2nd Year" }, { value: "3", label: "3rd Year" }]}
+                    />
                 </div>
-                <button disabled={isSubmitting} type="submit" className="w-full bg-finance-gold hover:bg-yellow-400 text-finance-navy font-bold py-3 rounded-lg mt-4 transition-colors disabled:opacity-50">
-                    {isSubmitting ? 'Registering...' : 'Register as Student'}
-                </button>
-            </form>
+            </FormContainer>
         );
     };
 
     const CompetitionForm = () => {
         const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
         const onSubmit = async (data) => {
-            console.log("Competition Data:", data);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
             setSubmitStatus('success');
             setTimeout(() => setSubmitStatus(null), 3000);
         };
         return (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Team Name</label>
-                    <input {...register("teamName", { required: "Team Name is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                    {errors.teamName && <span className="text-red-400 text-xs flex items-center gap-1 mt-1"><AlertCircle size={12} /> {errors.teamName.message}</span>}
+            <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-finance-emerald" btnText="Register Your Team">
+                <InputField label="Team Name" name="teamName" register={register} rules={{ required: "Required" }} error={errors.teamName} placeholder="The Wolves of Wall St." />
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Leader Name" name="leaderName" register={register} rules={{ required: "Required" }} error={errors.leaderName} placeholder="Team Captain" />
+                    <InputField label="Leader Email" name="leaderEmail" type="email" register={register} rules={{ required: "Required" }} error={errors.leaderEmail} placeholder="captain@team.com" />
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Team Leader Name</label>
-                    <input {...register("leaderName", { required: "Leader Name is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
+                <div className="p-4 bg-finance-emerald/10 border border-finance-emerald/20 rounded-xl mt-2 mb-2">
+                    <p className="text-finance-emerald text-xs font-medium flex items-center gap-2">
+                        <Users size={14} /> Team Size: 2-4 Members
+                    </p>
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Leader Email</label>
-                    <input type="email" {...register("leaderEmail", { required: "Email is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                </div>
-                <button disabled={isSubmitting} type="submit" className="w-full bg-finance-emerald hover:bg-emerald-500 text-white font-bold py-3 rounded-lg mt-4 transition-colors disabled:opacity-50">
-                    {isSubmitting ? 'Registering...' : 'Register Team'}
-                </button>
-            </form>
+            </FormContainer>
         );
     };
 
     const GuestForm = () => {
         const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
         const onSubmit = async (data) => {
-            console.log("Guest Data:", data);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
             setSubmitStatus('success');
             setTimeout(() => setSubmitStatus(null), 3000);
         };
         return (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Full Name</label>
-                    <input {...register("fullName", { required: "Name is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
+            <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-blue-500" btnText="Request Guest Pass">
+                <InputField label="Full Name" name="fullName" register={register} rules={{ required: "Required" }} error={errors.fullName} />
+                <InputField label="Email Address" name="email" type="email" register={register} rules={{ required: "Required" }} error={errors.email} />
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Designation" name="designation" register={register} />
+                    <InputField label="Organization" name="organization" register={register} />
                 </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Email</label>
-                    <input type="email" {...register("email", { required: "Email is required" })} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Designation</label>
-                    <input {...register("designation")} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                </div>
-                <div>
-                    <label className="block text-sm text-gray-400 mb-1">Organization</label>
-                    <input {...register("organization")} className="w-full bg-finance-navy/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-finance-gold focus:outline-none" />
-                </div>
-                <button disabled={isSubmitting} type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg mt-4 transition-colors disabled:opacity-50">
-                    {isSubmitting ? 'Registering...' : 'Register as Guest'}
-                </button>
-            </form>
+            </FormContainer>
         );
     };
 
+    const tabs = [
+        { id: 'entry', label: 'Student', icon: <User size={18} />, color: 'bg-finance-gold', text: 'Apply for the full-day student experience.' },
+        { id: 'competition', label: 'Team', icon: <Users size={18} />, color: 'bg-finance-emerald', text: 'Register your squad for the case showdown.' },
+        { id: 'guest', label: 'Guest', icon: <Briefcase size={18} />, color: 'bg-blue-500', text: 'Join us as an industry professional.' },
+    ];
+
     return (
-        <section id="register" className="py-24 bg-finance-navy relative">
-            <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">Register <span className="text-finance-gold">Now</span></h2>
-                    <p className="text-gray-400">Secure your spot at FinExplorer 2026.</p>
-                </motion.div>
+        <section id="register" className="min-h-screen py-24 bg-finance-navy relative flex items-center">
 
-                <div className="max-w-2xl mx-auto glass-card p-2 rounded-2xl">
-                    {/* Tabs */}
-                    <div className="grid grid-cols-3 gap-2 mb-8 bg-finance-navy/50 p-1 rounded-xl">
-                        <button
-                            onClick={() => setActiveTab('entry')}
-                            className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'entry' ? 'bg-finance-gold text-finance-navy shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                        >
-                            <User size={18} /> Student
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('competition')}
-                            className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'competition' ? 'bg-finance-emerald text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                        >
-                            <Users size={18} /> Team
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('guest')}
-                            className={`flex items-center justify-center gap-2 py-3 rounded-lg font-bold transition-all ${activeTab === 'guest' ? 'bg-blue-500 text-white shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                        >
-                            <Briefcase size={18} /> Guest
-                        </button>
-                    </div>
+            {/* Background Texture */}
+            <div className="absolute inset-0 opacity-[0.02] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
 
-                    {/* Forms */}
-                    <div className="p-6">
+            <div className="container mx-auto px-6 relative z-10">
+
+                <div className="max-w-6xl mx-auto bg-finance-lightNavy/20 border border-white/5 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-sm flex flex-col lg:flex-row min-h-[700px]">
+
+                    {/* Left Panel - Visual & Context */}
+                    <div className="lg:w-2/5 relative p-12 flex flex-col justify-between overflow-hidden">
+                        {/* Dynamic Background based on Tab */}
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeTab}
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {activeTab === 'entry' && <EntryForm />}
-                                {activeTab === 'competition' && <CompetitionForm />}
-                                {activeTab === 'guest' && <GuestForm />}
-                            </motion.div>
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.5 }}
+                                className={`absolute inset-0 opacity-100 ${activeTab === 'entry' ? 'bg-gradient-to-br from-finance-gold/90 to-orange-900/90' :
+                                        activeTab === 'competition' ? 'bg-gradient-to-br from-finance-emerald/90 to-green-900/90' :
+                                            'bg-gradient-to-br from-blue-500/90 to-indigo-900/90'
+                                    } mix-blend-multiply`}
+                            ></motion.div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+                        </AnimatePresence>
+
+                        {/* Content Layer */}
+                        <div className="relative z-10 h-full flex flex-col justify-between">
+                            <div>
+                                <h2 className="text-4xl font-display font-medium text-white mb-2">Secure Your Spot.</h2>
+                                <p className="text-blue-100/80 text-sm mb-12">Limited seats available for FinExplorer 2026.</p>
+
+                                <div className="space-y-4">
+                                    {tabs.map((tab) => (
+                                        <button
+                                            key={tab.id}
+                                            onClick={() => setActiveTab(tab.id)}
+                                            className={`w-full text-left p-4 rounded-xl border transition-all duration-300 flex items-center gap-4 group backdrop-blur-sm ${activeTab === tab.id
+                                                ? 'bg-black/20 border-white/20 shadow-lg'
+                                                : 'border-transparent hover:bg-black/10'
+                                                }`}
+                                        >
+                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shadow-inner ${activeTab === tab.id ? `${tab.color} text-finance-navy scale-110` : 'bg-white/10 text-white group-hover:bg-white/20'}`}>
+                                                {tab.icon}
+                                            </div>
+                                            <div>
+                                                <span className={`block font-bold text-lg transition-colors ${activeTab === tab.id ? 'text-white' : 'text-white/70 group-hover:text-white'}`}>{tab.label}</span>
+                                                <span className={`text-sm transition-colors hidden md:block ${activeTab === tab.id ? 'text-white/90' : 'text-white/50 group-hover:text-white/80'}`}>{tab.text}</span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Bottom Info */}
+                            <div className="mt-12 md:mt-0">
+                                <div className="flex items-center gap-3 text-sm text-white/80">
+                                    <div className="flex -space-x-2">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white/10 bg-gray-700"></div>
+                                        ))}
+                                    </div>
+                                    <span className="font-medium text-shadow-sm">+400 students registered</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Panel - Form Area */}
+                    <div className="lg:w-3/5 p-8 md:p-12 bg-finance-navy/40 relative">
+                        <div className="max-w-md mx-auto h-full flex flex-col">
+                            <div className="mb-8">
+                                <h3 className="text-2xl font-bold text-white mb-1">
+                                    {activeTab === 'entry' && 'Student Application'}
+                                    {activeTab === 'competition' && 'Team Registration'}
+                                    {activeTab === 'guest' && 'Guest Access'}
+                                </h3>
+                                <p className="text-gray-400 text-sm">Please fill in your details accurately.</p>
+                            </div>
+
+                            <div className="flex-1">
+                                <AnimatePresence mode="wait">
+                                    <motion.div
+                                        key={activeTab}
+                                        initial={{ opacity: 0, x: 20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="h-full"
+                                    >
+                                        {activeTab === 'entry' && <EntryForm />}
+                                        {activeTab === 'competition' && <CompetitionForm />}
+                                        {activeTab === 'guest' && <GuestForm />}
+                                    </motion.div>
+                                </AnimatePresence>
+                            </div>
+                        </div>
+
+                        {/* Success Overlay */}
+                        <AnimatePresence>
+                            {submitStatus === 'success' && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="absolute inset-0 z-50 flex items-center justify-center bg-finance-navy/95 backdrop-blur-md"
+                                >
+                                    <div className="text-center p-8">
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="w-20 h-20 bg-finance-emerald rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_50px_rgba(16,185,129,0.4)]"
+                                        >
+                                            <CheckCircle size={40} className="text-white" />
+                                        </motion.div>
+                                        <h3 className="text-3xl font-display font-medium text-white mb-3">You're In!</h3>
+                                        <p className="text-gray-400 text-lg">Check your inbox for your ticket.</p>
+                                    </div>
+                                </motion.div>
+                            )}
                         </AnimatePresence>
                     </div>
 
-                    {/* Success Message */}
-                    <AnimatePresence>
-                        {submitStatus === 'success' && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute inset-0 z-50 flex items-center justify-center bg-finance-navy/90 backdrop-blur-sm rounded-2xl"
-                            >
-                                <div className="text-center p-8">
-                                    <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(34,197,94,0.5)]">
-                                        <CheckCircle size={32} className="text-white" />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-white mb-2">Registration Successful!</h3>
-                                    <p className="text-gray-300">We have sent a confirmation email to you.</p>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
             </div>
         </section>
