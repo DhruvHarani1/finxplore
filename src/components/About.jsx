@@ -1,94 +1,99 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { BookOpen, TrendingUp, Users, Lightbulb, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 
 const About = () => {
+    const [activeFeature, setActiveFeature] = useState(0);
+
     const features = [
         {
-            icon: <BookOpen className="w-6 h-6 text-finance-navy" />,
+            id: "01",
             title: "Structured Exploration",
-            desc: "Deep dive into seamless pathways in finance, accounting, and management.",
-            color: "bg-finance-gold"
+            desc: "Don't just wander aimlessly. We provide a curated, expert-backed roadmap to navigate the complex world of finance, accounting, and management.",
+            color: "text-finance-gold"
         },
         {
-            icon: <TrendingUp className="w-6 h-6 text-finance-navy" />,
-            title: "Career Growth",
-            desc: "Navigate diverse opportunities with a clear, strategic roadmap.",
-            color: "bg-finance-emerald"
+            id: "02",
+            title: "Career Acceleration",
+            desc: "Speed up your professional journey. Understand the precise skills, certifications, and networks needed to break into top-tier roles.",
+            color: "text-finance-emerald"
         },
         {
-            icon: <Users className="w-6 h-6 text-white" />,
-            title: "Expert Insights",
-            desc: "Direct mentorship from industry leaders who have walked the path.",
-            color: "bg-blue-500"
+            id: "03",
+            title: "Insider Access",
+            desc: "Get behind the velvet rope. Learn directly from CFOs, Bankers, and Entrepreneurs who share the unwritten rules of the industry.",
+            color: "text-blue-400"
         },
         {
-            icon: <Lightbulb className="w-6 h-6 text-finance-navy" />,
-            title: "Empowerment",
-            desc: "Make confident, data-backed decisions about your professional future.",
-            color: "bg-yellow-300"
+            id: "04",
+            title: "Strategic Empowerment",
+            desc: "Confidence comes from competence. Leave with a concrete plan and the decision-making framework to build your future.",
+            color: "text-yellow-300"
         }
     ];
 
     return (
-        <section id="about" className="py-24 bg-finance-navy relative">
-            <div className="container mx-auto px-6">
+        <section id="about" className="py-32 bg-finance-navy relative overflow-hidden">
+            <div className="container mx-auto px-6 relative z-10">
 
-                {/* Section Header */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="max-w-2xl"
-                    >
-                        <h4 className="text-finance-gold font-bold tracking-widest uppercase text-sm mb-4">Our Mission</h4>
-                        <h2 className="text-4xl md:text-5xl font-display font-medium text-white leading-tight">
-                            Bridging the gap between <br className="hidden md:block" /> academic theory and reality.
-                        </h2>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <p className="text-gray-400 max-w-sm text-lg">
-                            We provide the compass for commerce students to navigate the complex world of finance.
-                        </p>
-                    </motion.div>
-                </div>
-
-                {/* Clean Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {features.map((feature, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                            className="group relative bg-finance-lightNavy/20 p-8 rounded-xl border border-white/5 hover:border-finance-gold/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 overflow-hidden"
-                        >
-                            {/* Hover Accent Gradient */}
-                            <div className={`absolute top-0 left-0 w-full h-1 ${feature.color} origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></div>
-
-                            {/* Subtle Background Gradient on Hover */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-
-                            <div className="relative z-10">
-                                <div className={`w-14 h-14 rounded-lg bg-finance-navy border border-white/10 flex items-center justify-center mb-6 text-white group-hover:text-finance-gold group-hover:border-finance-gold/30 transition-colors shadow-lg`}>
-                                    {React.cloneElement(feature.icon, { className: "w-7 h-7" })}
-                                </div>
-
-                                <h3 className="text-xl font-display font-medium text-white mb-3 group-hover:text-finance-gold transition-colors">{feature.title}</h3>
-
-                                <p className="text-gray-400 text-sm leading-relaxed border-l-2 border-white/5 pl-4 group-hover:border-white/20 transition-colors">
-                                    {feature.desc}
+                <div className="flex flex-col lg:flex-row gap-20">
+                    {/* Left: Sticky Narrative */}
+                    <div className="lg:w-5/12">
+                        <div className="sticky top-32">
+                            <motion.div
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                            >
+                                <h2 className="text-6xl md:text-7xl font-display font-medium text-white mb-8 leading-[0.9]">
+                                    Beyond <br /> the <span className="italic text-gray-500 font-serif">Textbook.</span>
+                                </h2>
+                                <p className="text-xl text-gray-400 leading-relaxed mb-12 max-w-md">
+                                    FinExplorer isn't just an event; it's a paradigm shift. We dismantle the traditional academic approach and rebuild it with real-world relevance.
                                 </p>
-                            </div>
-                        </motion.div>
-                    ))}
+
+                                <a href="#register" className="inline-flex items-center gap-4 text-white group">
+                                    <span className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-finance-gold group-hover:border-finance-gold group-hover:text-finance-navy transition-all duration-300">
+                                        <ArrowUpRight className="w-5 h-5" />
+                                    </span>
+                                    <span className="text-lg tracking-wide uppercase font-medium">Join the Movement</span>
+                                </a>
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Right: Editorial List */}
+                    <div className="lg:w-7/12">
+                        <div className="space-y-0">
+                            {features.map((feature, index) => (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    onMouseEnter={() => setActiveFeature(index)}
+                                    className="group relative border-t border-white/10 py-12 md:py-16 transition-colors duration-500 hover:bg-white/[0.02]"
+                                >
+                                    <div className="flex flex-col md:flex-row md:items-baseline gap-6 md:gap-12 relative z-10">
+                                        <span className={`text-xl font-mono ${feature.color} opacity-60 group-hover:opacity-100 transition-opacity`}>
+                                            /{feature.id}
+                                        </span>
+
+                                        <div className="flex-1">
+                                            <h3 className="text-3xl md:text-4xl font-display text-white mb-4 group-hover:translate-x-2 transition-transform duration-300">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="text-gray-500 text-lg leading-relaxed max-w-lg group-hover:text-gray-300 transition-colors">
+                                                {feature.desc}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                            <div className="border-t border-white/10"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
