@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, ChevronRight } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Footer from './Footer';
 
 const Layout = ({ children }) => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -85,45 +86,7 @@ const Layout = ({ children }) => {
             </main>
 
             {/* Footer */}
-            <footer className="bg-finance-lightNavy py-12 border-t border-white/5">
-                <div className="container mx-auto px-6 grid md:grid-cols-4 gap-8">
-                    <div>
-                        <div className="flex items-center gap-2 mb-4">
-                            <img src="/logo.png" alt="FinExplorer" className="h-8 w-auto grayscale opacity-80" />
-                            <span className="font-display font-bold text-xl opacity-80">FinExplorer</span>
-                        </div>
-                        <p className="text-gray-400 text-sm">
-                            Empowering global commerce students to explore diverse career pathways in finance.
-                        </p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold mb-4 text-white">Quick Links</h4>
-                        <ul className="space-y-2 text-gray-400 text-sm">
-                            <li><a href="#" className="hover:text-finance-gold">Home</a></li>
-                            <li><a href="#about" className="hover:text-finance-gold">About Us</a></li>
-                            <li><a href="#events" className="hover:text-finance-gold">Events</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold mb-4 text-white">Contact</h4>
-                        <ul className="space-y-2 text-gray-400 text-sm">
-                            <li>HL College of Commerce</li>
-                            <li>Ahmedabad, Gujarat</li>
-                            <li>info@finexplorer.com</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold mb-4 text-white">Stay Updated</h4>
-                        <div className="flex">
-                            <input type="email" placeholder="Enter your email" className="bg-finance-navy border border-white/10 px-4 py-2 rounded-l-lg w-full focus:outline-none focus:border-finance-gold text-white" />
-                            <button className="bg-finance-gold p-2 rounded-r-lg text-finance-navy font-bold hover:bg-yellow-400"><ChevronRight /></button>
-                        </div>
-                    </div>
-                </div>
-                <div className="text-center text-gray-600 text-xs mt-12 border-t border-white/5 pt-8">
-                    © 2026 FinExplorer. All rights reserved. Built with ❤️ by FinExplorer Team.
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };
