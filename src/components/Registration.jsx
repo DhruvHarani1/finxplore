@@ -3,10 +3,14 @@ import { useForm } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Users, Briefcase, CheckCircle, AlertCircle, ArrowRight, Loader } from 'lucide-react';
 
+import { supabase } from '../supabaseClient';
+
 const Registration = () => {
     const [activeTab, setActiveTab] = useState('entry');
-    const [submitStatus, setSubmitStatus] = useState(null);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success', 'error', or null
+    const [errorMessage, setErrorMessage] = useState('');
 
+    // ... InputField and SelectField components remain same ...
     // Reusable Input Component
     const InputField = ({ label, register, name, rules, error, type = "text", placeholder }) => (
         <div className="mb-4">
@@ -47,6 +51,21 @@ const Registration = () => {
             <div className="space-y-1">
                 {children}
             </div>
+
+            {submitStatus === 'error' && (
+                <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2 mt-4">
+                    <AlertCircle size={16} />
+                    {errorMessage || 'Something went wrong. Please try again.'}
+                </div>
+            )}
+
+            {submitStatus === 'success' && (
+                <div className="bg-green-500/10 border border-green-500/50 text-green-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2 mt-4">
+                    <CheckCircle size={16} />
+                    Registration Successful! We'll contact you soon.
+                </div>
+            )}
+
             <button
                 disabled={isSubmitting}
                 type="submit"
@@ -62,12 +81,39 @@ const Registration = () => {
     );
 
     const EntryForm = () => {
-        const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+        const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
+
         const onSubmit = async (data) => {
-            console.log("Entry Data:", data);
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setSubmitStatus('success');
-            setTimeout(() => setSubmitStatus(null), 3000);
+            setSubmitStatus(null);
+            setErrorMessage('');
+
+            try {
+                const { error } = await supabase
+                    .from('registrations_entry')
+                    .insert([
+                        {
+                            full_name: data.fullName,
+                            email: data.email,
+                            mobile: data.mobile,
+                            standard: data.standard,
+                            school: data.school,
+                            parent1_name: data.parent1Name || null,
+                            parent1_contact: data.parent1Contact || null,
+                            parent2_name: data.parent2Name || null,
+                            parent2_contact: data.parent2Contact || null,
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                setSubmitStatus('success');
+                reset();
+                setTimeout(() => setSubmitStatus(null), 5000);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                setSubmitStatus('error');
+                setErrorMessage(error.message);
+            }
         };
 
         return (
@@ -108,11 +154,37 @@ const Registration = () => {
     };
 
     const CompetitionForm = () => {
-        const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+        const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
         const onSubmit = async (data) => {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setSubmitStatus('success');
-            setTimeout(() => setSubmitStatus(null), 3000);
+            setSubmitStatus(null);
+            setErrorMessage('');
+
+            try {
+                const { error } = await supabase
+                    .from('registrations_competition')
+                    .insert([
+                        {
+                            team_name: data.teamName,
+                            leader_name: data.leaderName,
+                            leader_email: data.leaderEmail,
+                            leader_mobile: data.leaderMobile,
+                            leader_standard: data.leaderStandard,
+                            leader_school: data.leaderSchool,
+                            parent1_name: data.parent1Name || null,
+                            parent1_contact: data.parent1Contact || null
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                setSubmitStatus('success');
+                reset();
+                setTimeout(() => setSubmitStatus(null), 5000);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                setSubmitStatus('error');
+                setErrorMessage(error.message);
+            }
         };
         return (
             <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-finance-emerald" btnText="Register Your Team">
@@ -156,11 +228,36 @@ const Registration = () => {
     };
 
     const GuestForm = () => {
-        const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
+        const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
         const onSubmit = async (data) => {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            setSubmitStatus('success');
-            setTimeout(() => setSubmitStatus(null), 3000);
+            setSubmitStatus(null);
+            setErrorMessage('');
+
+            try {
+                const { error } = await supabase
+                    .from('registrations_guest')
+                    .insert([
+                        {
+                            full_name: data.fullName,
+                            email: data.email,
+                            mobile: data.mobile,
+                            standard: data.standard,
+                            school: data.school,
+                            parent1_name: data.parent1Name || null,
+                            parent1_contact: data.parent1Contact || null
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                setSubmitStatus('success');
+                reset();
+                setTimeout(() => setSubmitStatus(null), 5000);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                setSubmitStatus('error');
+                setErrorMessage(error.message);
+            }
         };
         return (
             <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-blue-500" btnText="Register for Sessions">
