@@ -76,24 +76,32 @@ const Registration = () => {
                     <InputField label="Full Name" name="fullName" register={register} rules={{ required: "Required" }} error={errors.fullName} placeholder="John Doe" />
                     <InputField label="Email Address" name="email" type="email" register={register} rules={{ required: "Required" }} error={errors.email} placeholder="john@example.com" />
                 </div>
-                <InputField label="College / Institution" name="college" register={register} rules={{ required: "Required" }} error={errors.college} placeholder="e.g. Harvard University" />
-                <div className="grid grid-cols-2 gap-4">
+
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Mobile No." name="mobile" type="tel" register={register} rules={{ required: "Required", pattern: { value: /^[0-9]{10}$/, message: "Invalid Phone" } }} error={errors.mobile} placeholder="9876543210" />
                     <SelectField
-                        label="Course"
-                        name="course"
+                        label="Standard"
+                        name="standard"
                         register={register}
                         rules={{ required: "Required" }}
-                        error={errors.course}
-                        options={[{ value: "B.Com", label: "B.Com" }, { value: "BBA", label: "BBA" }, { value: "MBA", label: "MBA" }, { value: "Other", label: "Other" }]}
+                        error={errors.standard}
+                        options={[{ value: "11th", label: "11th Grade" }, { value: "12th", label: "12th Grade" }]}
                     />
-                    <SelectField
-                        label="Year"
-                        name="year"
-                        register={register}
-                        rules={{ required: "Required" }}
-                        error={errors.year}
-                        options={[{ value: "1", label: "1st Year" }, { value: "2", label: "2nd Year" }, { value: "3", label: "3rd Year" }]}
-                    />
+                </div>
+
+                <InputField label="School Name" name="school" register={register} rules={{ required: "Required" }} error={errors.school} placeholder="e.g. DPS, St. Xavier's" />
+
+                {/* Optional Parent Details */}
+                <div className="mt-6 border-t border-white/10 pt-4">
+                    <h4 className="text-finance-gold text-xs font-bold uppercase tracking-widest mb-4">Parent Details (Optional)</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <InputField label="Father's Name" name="parent1Name" register={register} rules={{ required: false }} error={errors.parent1Name} placeholder="Father's Name" />
+                        <InputField label="Father's Contact" name="parent1Contact" type="tel" register={register} rules={{ required: false }} error={errors.parent1Contact} placeholder="Mobile No." />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <InputField label="Mother's Name" name="parent2Name" register={register} rules={{ required: false }} error={errors.parent2Name} placeholder="Mother's Name" />
+                        <InputField label="Mother's Contact" name="parent2Contact" type="tel" register={register} rules={{ required: false }} error={errors.parent2Contact} placeholder="Mobile No." />
+                    </div>
                 </div>
             </FormContainer>
         );
@@ -109,11 +117,36 @@ const Registration = () => {
         return (
             <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-finance-emerald" btnText="Register Your Team">
                 <InputField label="Team Name" name="teamName" register={register} rules={{ required: "Required" }} error={errors.teamName} placeholder="The Wolves of Wall St." />
+
+                <h4 className="text-finance-emerald text-xs font-bold uppercase tracking-widest mb-4 mt-4">Leader Details</h4>
                 <div className="grid md:grid-cols-2 gap-4">
                     <InputField label="Leader Name" name="leaderName" register={register} rules={{ required: "Required" }} error={errors.leaderName} placeholder="Team Captain" />
                     <InputField label="Leader Email" name="leaderEmail" type="email" register={register} rules={{ required: "Required" }} error={errors.leaderEmail} placeholder="captain@team.com" />
                 </div>
-                <div className="p-4 bg-finance-emerald/10 border border-finance-emerald/20 rounded-xl mt-2 mb-2">
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Mobile No." name="leaderMobile" type="tel" register={register} rules={{ required: "Required", pattern: { value: /^[0-9]{10}$/, message: "Invalid Phone" } }} error={errors.leaderMobile} placeholder="9876543210" />
+                    <SelectField
+                        label="Standard"
+                        name="leaderStandard"
+                        register={register}
+                        rules={{ required: "Required" }}
+                        error={errors.leaderStandard}
+                        options={[{ value: "11th", label: "11th Grade" }, { value: "12th", label: "12th Grade" }]}
+                    />
+                </div>
+
+                <InputField label="School Name" name="leaderSchool" register={register} rules={{ required: "Required" }} error={errors.leaderSchool} placeholder="e.g. DPS, St. Xavier's" />
+
+                {/* Optional Parent Details */}
+                <div className="mt-6 border-t border-white/10 pt-4">
+                    <h4 className="text-finance-emerald text-xs font-bold uppercase tracking-widest mb-4">Parent Details (Optional)</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <InputField label="Father's Name" name="parent1Name" register={register} rules={{ required: false }} error={errors.parent1Name} placeholder="Father's Name" />
+                        <InputField label="Father's Contact" name="parent1Contact" type="tel" register={register} rules={{ required: false }} error={errors.parent1Contact} placeholder="Mobile No." />
+                    </div>
+                </div>
+
+                <div className="p-4 bg-finance-emerald/10 border border-finance-emerald/20 rounded-xl mt-4 mb-2">
                     <p className="text-finance-emerald text-xs font-medium flex items-center gap-2">
                         <Users size={14} /> Team Size: 2-4 Members
                     </p>
@@ -131,11 +164,32 @@ const Registration = () => {
         };
         return (
             <FormContainer onSubmit={handleSubmit(onSubmit)} isSubmitting={isSubmitting} btnColor="bg-blue-500" btnText="Request Guest Pass">
-                <InputField label="Full Name" name="fullName" register={register} rules={{ required: "Required" }} error={errors.fullName} />
-                <InputField label="Email Address" name="email" type="email" register={register} rules={{ required: "Required" }} error={errors.email} />
                 <div className="grid md:grid-cols-2 gap-4">
-                    <InputField label="Designation" name="designation" register={register} />
-                    <InputField label="Organization" name="organization" register={register} />
+                    <InputField label="Full Name" name="fullName" register={register} rules={{ required: "Required" }} error={errors.fullName} />
+                    <InputField label="Email Address" name="email" type="email" register={register} rules={{ required: "Required" }} error={errors.email} />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                    <InputField label="Mobile No." name="mobile" type="tel" register={register} rules={{ required: "Required", pattern: { value: /^[0-9]{10}$/, message: "Invalid Phone" } }} error={errors.mobile} placeholder="9876543210" />
+                    <SelectField
+                        label="Standard"
+                        name="standard"
+                        register={register}
+                        rules={{ required: "Required" }}
+                        error={errors.standard}
+                        options={[{ value: "11th", label: "11th Grade" }, { value: "12th", label: "12th Grade" }]}
+                    />
+                </div>
+
+                <InputField label="School Name" name="school" register={register} rules={{ required: "Required" }} error={errors.school} placeholder="e.g. DPS, St. Xavier's" />
+
+                {/* Optional Parent Details */}
+                <div className="mt-6 border-t border-white/10 pt-4">
+                    <h4 className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">Parent Details (Optional)</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <InputField label="Father's Name" name="parent1Name" register={register} rules={{ required: false }} error={errors.parent1Name} placeholder="Father's Name" />
+                        <InputField label="Father's Contact" name="parent1Contact" type="tel" register={register} rules={{ required: false }} error={errors.parent1Contact} placeholder="Mobile No." />
+                    </div>
                 </div>
             </FormContainer>
         );
@@ -168,8 +222,8 @@ const Registration = () => {
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.5 }}
                                 className={`absolute inset-0 opacity-100 ${activeTab === 'entry' ? 'bg-gradient-to-br from-finance-gold/90 to-orange-900/90' :
-                                        activeTab === 'competition' ? 'bg-gradient-to-br from-finance-emerald/90 to-green-900/90' :
-                                            'bg-gradient-to-br from-blue-500/90 to-indigo-900/90'
+                                    activeTab === 'competition' ? 'bg-gradient-to-br from-finance-emerald/90 to-green-900/90' :
+                                        'bg-gradient-to-br from-blue-500/90 to-indigo-900/90'
                                     } mix-blend-multiply`}
                             ></motion.div>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
@@ -179,7 +233,7 @@ const Registration = () => {
                         <div className="relative z-10 h-full flex flex-col justify-between">
                             <div>
                                 <h2 className="text-4xl font-display font-medium text-white mb-2">Secure Your Spot.</h2>
-                                <p className="text-blue-100/80 text-sm mb-12">Limited seats available for FinExplorer 2026.</p>
+                                <p className="text-blue-100/80 text-sm mb-12">Limited seats available for Finxplore 2026.</p>
 
                                 <div className="space-y-4">
                                     {tabs.map((tab) => (
